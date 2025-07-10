@@ -4,7 +4,7 @@ This document provides a high-level overview of Obsidian Scribe's architecture, 
 
 ## System Architecture
 
-```text
+```
 ┌─────────────────────────────────────────────────────────────────┐
 │                        Obsidian Scribe                          │
 ├─────────────────────────────────────────────────────────────────┤
@@ -143,7 +143,7 @@ This document provides a high-level overview of Obsidian Scribe's architecture, 
 
 ### Processing Pipeline
 
-```text
+```
 1. Audio File Detected
    └─> File Watcher
        └─> Event Handler (validation)
@@ -169,7 +169,7 @@ This document provides a high-level overview of Obsidian Scribe's architecture, 
 
 ### Error Handling Flow
 
-```text
+```
 Try Operation
  └─> Success: Continue
  └─> Failure: Catch Exception
@@ -237,7 +237,7 @@ Try Operation
 
 ### 1. Caching Strategy
 
-```text
+```
 Request → Memory Cache → Disk Cache → Process → Store in Cache
 ```
 

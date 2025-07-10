@@ -165,7 +165,7 @@ logging:
 
 Any configuration value can be overridden using environment variables. The format is:
 
-```text
+```
 OBSIDIAN_SCRIBE_<SECTION>_<KEY>
 ```
 

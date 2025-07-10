@@ -174,45 +174,67 @@ obsidian-scribe/
 │   ├── config/
 │   │   ├── __init__.py
 │   │   ├── manager.py          # Configuration management
-│   │   └── schema.py           # Configuration validation
+│   │   ├── schema.py           # Configuration validation
+│   │   └── defaults.py         # Default configuration values
 │   ├── watcher/
 │   │   ├── __init__.py
 │   │   ├── file_watcher.py     # File system monitoring
-│   │   └── event_handler.py    # File event processing
+│   │   ├── event_handler.py    # File event processing
+│   │   └── queue_manager.py    # Processing queue management
 │   ├── audio/
 │   │   ├── __init__.py
 │   │   ├── processor.py        # Audio processing orchestration
 │   │   ├── diarizer.py         # Speaker diarization
-│   │   └── transcriber.py      # Whisper API integration
+│   │   ├── transcriber.py      # Whisper API integration
+│   │   ├── converter.py        # Audio format conversion
+│   │   └── chunker.py          # Audio file splitting
 │   ├── transcript/
 │   │   ├── __init__.py
 │   │   ├── generator.py        # Transcript generation
-│   │   └── markdown_writer.py  # Markdown formatting
+│   │   ├── markdown_writer.py  # Markdown formatting
+│   │   ├── formatter.py        # Text formatting utilities
+│   │   └── templates.py        # Markdown templates
 │   ├── storage/
 │   │   ├── __init__.py
 │   │   ├── file_manager.py     # File operations
-│   │   └── archive.py          # Archive management
+│   │   ├── archive.py          # Archive management
+│   │   ├── state_manager.py    # Processing state persistence
+│   │   └── cache.py            # Caching functionality
 │   └── utils/
 │       ├── __init__.py
 │       ├── logger.py           # Logging utilities
-│       └── exceptions.py       # Custom exceptions
-├── config/
-│   └── config.yaml             # Default configuration
+│       ├── exceptions.py       # Custom exceptions
+│       ├── validators.py       # Input validation
+│       └── helpers.py          # General helper functions
 ├── tests/
 │   ├── __init__.py
-│   ├── test_watcher.py
-│   ├── test_audio.py
-│   ├── test_transcript.py
-│   └── test_storage.py
+│   ├── conftest.py            # Pytest configuration
+│   ├── test_config.py         # Configuration tests
+│   ├── test_utils.py          # Utility tests
+│   └── TEST_PLAN.md           # Test planning documentation
 ├── docs/
-│   ├── setup.md               # Setup instructions
-│   ├── configuration.md       # Configuration guide
-│   └── api.md                 # API documentation
+│   ├── README.md              # Documentation overview
+│   ├── INSTALLATION.md        # Setup instructions
+│   ├── CONFIGURATION.md       # Configuration guide
+│   ├── USAGE.md               # Usage instructions
+│   ├── API_REFERENCE.md       # API documentation
+│   ├── ARCHITECTURE_OVERVIEW.md # Architecture guide
+│   ├── TROUBLESHOOTING.md     # Common issues
+│   └── CONTRIBUTING.md        # Contribution guidelines
+├── config.example.yaml        # Example configuration
 ├── requirements.txt           # Python dependencies
 ├── setup.py                   # Package setup
+├── setup.cfg                  # Setup configuration
+├── pyproject.toml            # Modern Python project config
 ├── README.md                  # Project overview
-└── .gitignore                # Git ignore rules
+├── CHANGELOG.md              # Version history
+├── LICENSE                   # License file
+├── Makefile                  # Common tasks automation
+├── .gitignore                # Git ignore rules
+└── .env.example              # Environment variables example
 ```
+
+See [PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md) for the complete project structure including legacy components and additional documentation files.
 
 ## Configuration Schema
 

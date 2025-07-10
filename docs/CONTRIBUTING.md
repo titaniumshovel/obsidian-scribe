@@ -179,7 +179,7 @@ except Exception as e:
 
 ### Test Structure
 
-```text
+```
 tests/
 ├── unit/           # Unit tests for individual components
 ├── integration/    # Integration tests

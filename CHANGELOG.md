@@ -5,11 +5,53 @@ All notable changes to Obsidian Scribe will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [Unreleased] - 2025-01-10
 
 ### Added
 
-- Initial release of Obsidian Scribe
+- Complete project restructuring with modular architecture
+- Comprehensive documentation suite in `docs/` directory:
+  - Installation guide with prerequisites and troubleshooting
+  - Usage guide with examples and best practices
+  - Configuration reference with all options
+  - API reference for all modules
+  - Architecture overview with system design
+  - Troubleshooting guide for common issues
+  - Contributing guidelines
+- Modern Python packaging:
+  - `setup.py` with entry points and dependencies
+  - `setup.cfg` with metadata and tool configuration
+  - `pyproject.toml` with Black formatting config
+  - `Makefile` for development tasks
+- `.gitignore` file with comprehensive exclusions:
+  - Sensitive configuration files (config.yaml, .env)
+  - Audio files and processing directories
+  - Python artifacts and virtual environments
+  - IDE and OS-specific files
+- `.env.example` with documented environment variables
+
+### Fixed
+
+- Import errors in `src/audio/transcriber.py`:
+  - Updated deprecated `requests.packages.urllib3.util.retry` to `urllib3.util.retry`
+- Type annotation issues in `src/watcher/file_watcher.py`:
+  - Fixed Observer type annotation for Pylance compatibility
+- Missing dependencies in `requirements.txt`:
+  - Added `urllib3>=2.0.0` for retry functionality
+  - Added `ffmpeg-python>=0.2.0` for audio processing
+  - Uncommented `pyannote.audio`, `torch`, and `torchaudio` for diarization
+- Markdown linting issues in documentation:
+  - Added language specifiers to all code blocks
+
+### Changed
+
+- Updated README.md to reflect new structure and installation process
+- Enhanced project documentation with complete guides
+- Improved error messages and logging throughout
+
+### Project Structure
+
+- Initial release of Obsidian Scribe with complete architecture:
 - Core file watching functionality with watchdog library
 - Audio processing pipeline with chunking support
 - Whisper API integration for transcription
@@ -74,14 +116,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Input validation and sanitization
 - No telemetry or data collection
 
-## [0.1.0] - TBD
+## Development Progress
 
-### Added This Version
+### 2025-01-10 - Major Restructuring Complete
 
-- First public release
-- Basic functionality for audio transcription
-- Obsidian integration support
-- Documentation and examples
+All components have been implemented according to the architecture:
+
+- ✅ Configuration management with YAML and environment variables
+- ✅ File watching system with priority queue
+- ✅ Audio processing pipeline with chunking
+- ✅ Speaker diarization with pyannote.audio
+- ✅ Whisper API transcription
+- ✅ Transcript generation with templates
+- ✅ Storage management with archiving
+- ✅ Comprehensive utility modules
+- ✅ Complete documentation suite
+- ✅ Modern Python packaging
+
+The project is now ready for testing and deployment.
 
 ### Known Issues
 

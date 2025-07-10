@@ -1,4 +1,4 @@
-# Obsidian Scribe - Architecture Design
+# Obsidian Scribe - Advanced Audio Processing for Obsidian
 
 ## Overview
 
@@ -20,9 +20,20 @@ Obsidian Scribe is a Python application designed to complement the Obsidian Whis
 - ⚙️ **Flexible Configuration**: YAML-based configuration with environment variable support
 - 🛡️ **Robust Error Handling**: Comprehensive logging and automatic retry mechanisms
 
-## Architecture Documents
+## Documentation
 
-This repository contains the complete architectural design for Obsidian Scribe:
+Complete documentation is available in the `docs/` directory:
+
+### Getting Started
+- **[Installation Guide](docs/INSTALLATION.md)** - Prerequisites, setup, and troubleshooting
+- **[Usage Guide](docs/USAGE.md)** - How to use Obsidian Scribe effectively
+- **[Configuration Guide](docs/CONFIGURATION.md)** - All configuration options explained
+
+### Technical Documentation
+- **[API Reference](docs/API_REFERENCE.md)** - Complete API documentation for all modules
+- **[Architecture Overview](docs/ARCHITECTURE_OVERVIEW.md)** - System design and component interactions
+
+### Architecture Documents
 
 1. **[ARCHITECTURE.md](ARCHITECTURE.md)** - Comprehensive system architecture including:
    - High-level component design
@@ -147,6 +158,29 @@ audio_file: "[[Audio/Meeting-2024-01-15.wav]]"
 [00:01:10] Thanks for having me. I have some updates...
 ```
 
+## Installation
+
+### Prerequisites
+- Python 3.8 or higher
+- FFmpeg installed and in PATH
+- Git (for cloning the repository)
+
+### Quick Install
+
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/obsidian-scribe.git
+cd obsidian-scribe
+
+# Install the package
+pip install -e .
+
+# Or use make
+make install
+```
+
+For detailed installation instructions, see [docs/INSTALLATION.md](docs/INSTALLATION.md).
+
 ## Project Structure
 
 ```
@@ -158,32 +192,77 @@ obsidian-scribe/
 │   ├── transcript/     # Transcript generation
 │   ├── storage/        # File management
 │   └── utils/          # Utilities and helpers
-├── config/             # Configuration files
+├── docs/               # Complete documentation
 ├── tests/              # Test suite
-├── docs/               # Documentation
-└── scripts/            # Utility scripts
+├── Audio/              # Input audio files (created on first run)
+├── Transcripts/        # Output transcripts (created on first run)
+└── Archive/            # Processed files (created on first run)
 ```
 
 ## Configuration
 
-Basic configuration example:
+1. Copy the example configuration:
+   ```bash
+   cp config.example.yaml config.yaml
+   ```
 
-```yaml
-obsidian_scribe:
-  paths:
-    audio_folder: "./Audio"
-    transcript_folder: "./Transcripts"
-    archive_folder: "./Audio/Archive"
-  
-  transcription:
-    api_endpoint: "https://api.rdsec.trendmicro.com/prod/aiendpoint/v1/audio/transcriptions"
-    model: "whisper-1"
-    api_key_env: "OPENAI_API_KEY"
-  
-  diarization:
-    max_speakers: 10
-    min_segment_duration: 0.5
+2. Edit `config.yaml` with your settings:
+   ```yaml
+   obsidian_scribe:
+     paths:
+       audio_folder: "./Audio"
+       transcript_folder: "./Transcripts"
+       archive_folder: "./Archive"
+     
+     transcription:
+       api_endpoint: "https://api.openai.com/v1/audio/transcriptions"
+       model: "whisper-1"
+       api_key_env: "OPENAI_API_KEY"
+     
+     diarization:
+       enabled: true
+       max_speakers: 10
+   ```
+
+3. Set your API key:
+   ```bash
+   export OPENAI_API_KEY="your-api-key-here"
+   ```
+
+For complete configuration options, see [docs/CONFIGURATION.md](docs/CONFIGURATION.md).
+
+## Usage
+
+### Basic Usage
+
+```bash
+# Run with default config
+obsidian-scribe
+
+# Run with custom config
+obsidian-scribe --config /path/to/config.yaml
+
+# Run in debug mode
+obsidian-scribe --debug
 ```
+
+### As a Python Module
+
+```python
+from src.config.manager import ConfigManager
+from src.watcher.file_watcher import FileWatcher
+from src.audio.processor import AudioProcessor
+
+# Initialize components
+config = ConfigManager.get_config()
+processor = AudioProcessor(config)
+watcher = FileWatcher(config['paths']['audio_folder'], processor, config)
+
+# Start processing
+watcher.start()
+```
+
+For more usage examples, see [docs/USAGE.md](docs/USAGE.md).
 
 ## Complete Recording & Processing Workflow
 
@@ -219,31 +298,54 @@ Obsidian Scribe automatically:
   - Enhanced formatting
   - Batch processing
 
-## Next Steps
+## Development
 
-This architecture provides a solid foundation for implementing Obsidian Scribe. The design prioritizes:
+### Setup Development Environment
 
-- **Reliability**: Robust error handling and recovery
-- **Performance**: Efficient processing with configurable concurrency
-- **Usability**: Simple configuration and Obsidian integration
-- **Compatibility**: Works with existing Obsidian Whisper plugin workflow
-- **Extensibility**: Modular design for future enhancements
+```bash
+# Install development dependencies
+make dev
 
-### Implementation Priorities
+# Run tests
+make test
 
-1. Core file watching and processing pipeline
-2. Whisper API integration with custom endpoint
-3. pyannote.audio diarization setup
-4. Markdown generation with Obsidian formatting
-5. Configuration management system
-6. Error handling and logging
-7. Testing suite
-8. Documentation and examples
+# Run linting
+make lint
+
+# Build package
+make build
+```
+
+### Contributing
+
+See [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md) for guidelines on contributing to this project.
+
+## Troubleshooting
+
+Common issues and solutions are documented in [docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md).
+
+## Recent Updates
+
+- ✅ Complete project restructuring with modular architecture
+- ✅ Comprehensive documentation in `docs/` directory
+- ✅ Fixed all import and dependency issues
+- ✅ Added `.gitignore` for sensitive files and large audio files
+- ✅ Modern Python packaging with `setup.py`, `setup.cfg`, and `pyproject.toml`
+- ✅ Development tools with `Makefile`
+
+See [CHANGELOG.md](CHANGELOG.md) for detailed version history.
 
 ## License
 
-This architectural design is provided as a reference for implementing Obsidian Scribe. The actual implementation should include appropriate licensing based on the dependencies used.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+
+- [Obsidian Whisper Plugin](https://github.com/nikdanilov/whisper-obsidian) for the recording interface
+- [pyannote.audio](https://github.com/pyannote/pyannote-audio) for speaker diarization
+- [OpenAI Whisper](https://github.com/openai/whisper) for transcription capabilities
+- The Obsidian community for inspiration and feedback
 
 ---
 
-*This architecture was designed with a focus on reliability, performance, and seamless Obsidian integration. The modular design allows for easy testing, maintenance, and future enhancements.*
+*Obsidian Scribe enhances your Obsidian workflow with advanced audio processing capabilities, seamlessly integrating with the Obsidian Whisper plugin for a complete recording and transcription solution.*

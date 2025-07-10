@@ -166,7 +166,7 @@ python -m src.main --log-level DEBUG
 
 Transcripts are saved with a structure compatible with Obsidian:
 
-```text
+```
 Transcripts/
 ├── 2024/
 │   ├── 01/

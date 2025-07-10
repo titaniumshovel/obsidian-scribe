@@ -49,58 +49,51 @@ obsidian-scribe/
 │       ├── validators.py         # Input validation
 │       └── helpers.py            # General helper functions
 │
-├── config/                       # Configuration files
-│   ├── config.yaml              # Default configuration
-│   └── config.example.yaml      # Example configuration
-│
-├── tests/                       # Test suite
+├── obsidian_scribe/              # Legacy module (to be migrated)
 │   ├── __init__.py
-│   ├── conftest.py             # Pytest configuration
-│   ├── fixtures/               # Test fixtures
-│   │   ├── audio_files/        # Sample audio files
-│   │   └── config_files/       # Test configurations
-│   ├── unit/                   # Unit tests
-│   │   ├── test_config.py
-│   │   ├── test_watcher.py
-│   │   ├── test_audio.py
-│   │   ├── test_transcript.py
-│   │   └── test_storage.py
-│   └── integration/            # Integration tests
-│       ├── test_pipeline.py
-│       └── test_api.py
+│   ├── file_watcher.py
+│   ├── processor.py
+│   └── utils.py
 │
-├── docs/                       # Documentation
-│   ├── setup.md               # Installation guide
-│   ├── configuration.md       # Configuration reference
-│   ├── usage.md               # Usage instructions
-│   ├── api.md                 # API documentation
-│   └── troubleshooting.md     # Common issues and solutions
+├── tests/                        # Test suite
+│   ├── __init__.py
+│   ├── conftest.py              # Pytest configuration
+│   ├── test_config.py           # Configuration tests
+│   ├── test_utils.py            # Utility tests
+│   └── TEST_PLAN.md             # Test planning documentation
 │
-├── scripts/                    # Utility scripts
-│   ├── setup_models.py        # Download required models
-│   ├── validate_config.py     # Configuration validator
-│   └── test_api.py           # API connectivity test
+├── docs/                         # Documentation
+│   ├── README.md                # Documentation overview
+│   ├── API_REFERENCE.md         # API documentation
+│   ├── ARCHITECTURE_OVERVIEW.md # Architecture guide
+│   ├── CONFIGURATION.md         # Configuration reference
+│   ├── CONTRIBUTING.md          # Contribution guidelines
+│   ├── INSTALLATION.md          # Installation guide
+│   ├── TROUBLESHOOTING.md       # Common issues and solutions
+│   └── USAGE.md                 # Usage instructions
 │
-├── docker/                    # Docker configuration
-│   ├── Dockerfile            # Container definition
-│   └── docker-compose.yml    # Compose configuration
+├── config.example.yaml          # Example configuration
+├── requirements.txt             # Production dependencies
+├── setup.py                     # Package setup script
+├── setup.cfg                    # Setup configuration
+├── pyproject.toml              # Modern Python project config
+├── README.md                   # Project overview
+├── LICENSE                     # License file
+├── CHANGELOG.md               # Version history
+├── .gitignore                 # Git ignore rules
+├── .env.example               # Environment variables example
+├── Makefile                   # Common tasks automation
+├── obsidian_scribe.py         # Legacy entry point
+├── test_pipeline.py           # Pipeline testing script
 │
-├── .github/                   # GitHub configuration
-│   └── workflows/
-│       ├── tests.yml         # CI test workflow
-│       └── release.yml       # Release workflow
-│
-├── requirements.txt          # Production dependencies
-├── requirements-dev.txt      # Development dependencies
-├── setup.py                  # Package setup script
-├── setup.cfg                 # Setup configuration
-├── pyproject.toml           # Modern Python project config
-├── README.md                # Project overview
-├── LICENSE                  # License file
-├── CHANGELOG.md            # Version history
-├── .gitignore              # Git ignore rules
-├── .env.example            # Environment variables example
-└── Makefile                # Common tasks automation
+├── ARCHITECTURE.md            # Architecture documentation
+├── AUDIO_CHUNKING.md         # Audio chunking documentation
+├── CONFIG_SCHEMA.md          # Configuration schema details
+├── PROJECT_STRUCTURE.md      # This file
+├── RESTRUCTURING_PROGRESS.md # Project restructuring progress
+├── TECHNICAL_DECISIONS.md    # Technical decision log
+├── VOICEMEETER_SETUP.md     # VoiceMeeter setup guide
+└── WHISPER_INTEGRATION.md   # Whisper API integration guide
 ```
 
 ## Module Descriptions
@@ -208,11 +201,8 @@ class ConfigManager:
 
 ## Configuration Files
 
-### `config/config.yaml`
-Default configuration with all available options and sensible defaults.
-
-### `config/config.example.yaml`
-Minimal example configuration showing only required settings.
+### `config.example.yaml`
+Example configuration showing all available settings with sensible defaults.
 
 ### `.env.example`
 Example environment variables:
@@ -225,66 +215,73 @@ LOG_LEVEL=INFO
 
 ## Testing Structure
 
-### Unit Tests
-- Test individual components in isolation
-- Mock external dependencies
-- Focus on edge cases and error conditions
+### Current Tests
+- **test_config.py**: Configuration management tests
+- **test_utils.py**: Utility function tests
+- **TEST_PLAN.md**: Comprehensive test planning documentation
 
-### Integration Tests
-- Test complete workflows
-- Use real audio files (small samples)
-- Verify end-to-end functionality
-
-### Test Fixtures
-- Sample audio files in various formats
-- Mock API responses
-- Test configuration files
+### Planned Test Structure
+- Unit tests for individual components
+- Integration tests for complete workflows
+- Test fixtures with sample audio files and mock API responses
 
 ## Documentation
 
-### User Documentation
-- **setup.md**: Step-by-step installation guide
-- **configuration.md**: Detailed configuration reference
-- **usage.md**: Common usage scenarios and examples
-- **troubleshooting.md**: FAQ and problem solutions
+### User Documentation (in `docs/`)
+- **INSTALLATION.md**: Step-by-step installation guide
+- **CONFIGURATION.md**: Detailed configuration reference
+- **USAGE.md**: Common usage scenarios and examples
+- **TROUBLESHOOTING.md**: FAQ and problem solutions
 
 ### Developer Documentation
-- **api.md**: Internal API documentation
+- **API_REFERENCE.md**: Internal API documentation
+- **ARCHITECTURE_OVERVIEW.md**: System architecture guide
+- **CONTRIBUTING.md**: Contribution guidelines
 - Inline code documentation with docstrings
 - Type hints throughout the codebase
 
+### Project Documentation (root directory)
+- **ARCHITECTURE.md**: Detailed architecture decisions
+- **TECHNICAL_DECISIONS.md**: Log of technical choices
+- **CONFIG_SCHEMA.md**: Configuration schema details
+- **AUDIO_CHUNKING.md**: Audio processing documentation
+- **WHISPER_INTEGRATION.md**: Whisper API integration guide
+- **VOICEMEETER_SETUP.md**: VoiceMeeter configuration guide
+- **RESTRUCTURING_PROGRESS.md**: Project restructuring tracker
+
 ## Build and Deployment
 
-### Docker Support
-- Multi-stage Dockerfile for minimal image size
-- docker-compose.yml for easy local development
-- Support for both CPU and GPU variants
-
 ### Package Distribution
-- setup.py for pip installation
-- pyproject.toml for modern Python packaging
-- Automated release workflow via GitHub Actions
+- **setup.py**: Package setup script for pip installation
+- **pyproject.toml**: Modern Python packaging configuration
+- **setup.cfg**: Additional setup configuration
+- **requirements.txt**: Production dependencies
 
 ## Development Workflow
 
 ### Makefile Commands
-```makefile
-install:        # Install dependencies
-test:           # Run all tests
-test-unit:      # Run unit tests only
-lint:           # Run linting checks
-format:         # Format code with black
-type-check:     # Run mypy type checking
-docs:           # Generate documentation
-clean:          # Clean build artifacts
-docker-build:   # Build Docker image
-docker-run:     # Run Docker container
-```
+The project includes a Makefile for common development tasks. Planned commands include:
+- `install`: Install dependencies
+- `test`: Run all tests
+- `lint`: Run linting checks
+- `format`: Format code with black
+- `type-check`: Run mypy type checking
+- `clean`: Clean build artifacts
 
-### Pre-commit Hooks
-- Code formatting with black
-- Linting with flake8
-- Type checking with mypy
-- Import sorting with isort
+### Development Best Practices
+- Use type hints throughout the codebase
+- Follow PEP 8 style guidelines
+- Write comprehensive docstrings
+- Include unit tests for new functionality
+- Update documentation when adding features
+
+## Current Status
+
+The project is currently undergoing restructuring from a monolithic script to a modular architecture. Key components are being migrated from the `obsidian_scribe/` directory to the new `src/` structure. See `RESTRUCTURING_PROGRESS.md` for detailed progress tracking.
+
+### Legacy Components
+- **obsidian_scribe.py**: Original entry point (to be replaced by src/main.py)
+- **obsidian_scribe/**: Legacy module directory (being migrated to src/)
+- **test_pipeline.py**: Pipeline testing script
 
 This structure provides a clean, maintainable foundation for the Obsidian Scribe project with clear separation of concerns and room for future growth.
