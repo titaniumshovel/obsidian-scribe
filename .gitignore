@@ -1,0 +1,246 @@
+# Obsidian Scribe .gitignore
+
+# Sensitive Configuration Files
+config.yaml
+.env
+*.key
+*.pem
+secrets.json
+credentials.json
+
+# Audio Files (can be large)
+*.mp3
+*.wav
+*.m4a
+*.mp4
+*.flac
+*.ogg
+*.wma
+*.aac
+*.opus
+*.webm
+
+# Project Directories
+Audio/
+Transcripts/
+Archive/
+temp/
+cache/
+state/
+logs/
+output/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Virtual Environments
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+.venv/
+
+# Testing
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+htmlcov/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb
+
+# pyenv
+.python-version
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath parsed files
+*.sage.py
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# pytype static type analyzer
+.pytype/
+
+# Cython debug symbols
+cython_debug/
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+*.db-wal
+*.db-shm
+
+# Log files
+*.log
+logs/
+*.log.*
+
+# IDE and Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.pydevproject
+.settings/
+*.sublime-project
+*.sublime-workspace
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# Backup files
+*.bak
+*.backup
+*.old
+*.orig
+*.tmp
+
+# Archive files (project specific)
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.rar
+*.7z
+
+# Temporary files
+tmp/
+temp/
+*.temp
+*.tmp
+~$*
+
+# Cache directories
+.cache/
+cache/
+__pycache__/
+
+# State management
+state/
+*.state
+*.lock
+
+# Generated documentation
+docs/_build/
+docs/api/
+
+# Profiling data
+*.prof
+*.lprof
+
+# Security
+*.cert
+*.crt
+*.csr
+*.der
+*.p12
+*.p7b
+*.p7r
+*.pfx
+*.spc
+
+# Local configuration overrides
+config.local.yaml
+config.dev.yaml
+config.prod.yaml
+local_settings.py
+
+# Whisper model files (can be large)
+models/
+*.pt
+*.pth
+*.onnx
+
+# FFmpeg binaries
+ffmpeg.exe
+ffprobe.exe
+ffplay.exe
+
+# Test audio samples (if you want to exclude them)
+test_audio/
+samples/
+
+# Performance profiling
+*.prof
+*.stats
+
+# Memory dumps
+*.hprof
+*.heap
+
+# Custom ignore patterns
+.ignore
+.gitignore.local

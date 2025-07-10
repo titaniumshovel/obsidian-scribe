@@ -1,0 +1,32 @@
+# Core dependencies for Obsidian Scribe
+
+# File watching
+watchdog>=3.0.0
+
+# Audio processing
+pyannote.audio>=3.0.0  # For speaker diarization
+torch>=2.0.0  # Required by pyannote
+torchaudio>=2.0.0  # Required by pyannote
+
+# API client for Whisper
+openai>=1.0.0
+
+# Audio file manipulation
+pydub>=0.25.1
+ffmpeg-python>=0.2.0  # For audio conversion and chunking
+
+# Configuration management
+PyYAML>=6.0
+
+# Numerical operations
+numpy>=1.24.0
+
+# HTTP requests (for custom API endpoints)
+requests>=2.31.0
+urllib3>=2.0.0  # For retry logic in HTTP requests
+
+# Development dependencies (optional)
+# pytest>=7.4.0
+# black>=23.0.0
+# flake8>=6.0.0
+# mypy>=1.5.0

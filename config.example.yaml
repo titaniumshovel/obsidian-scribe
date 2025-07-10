@@ -1,0 +1,341 @@
+# Obsidian Scribe Example Configuration File
+# Copy this file to config.yaml and modify according to your needs
+# Environment variables can override these settings using the format: OBSIDIAN_SCRIBE_SECTION_KEY
+
+# Paths configuration
+paths:
+  # Directory to watch for new audio files
+  # This is where you'll place audio files to be transcribed
+  watch_folder: "./audio_input"
+  
+  # Directory where processed transcripts will be saved
+  # Transcripts will be organized by date/speaker based on settings
+  output_folder: "./transcripts"
+  
+  # Temporary directory for intermediate files
+  # Used for audio conversion, chunks, etc.
+  temp_folder: "./temp"
+  
+  # Archive directory for processed files
+  # Original audio and transcripts can be archived here
+  archive_folder: "./archive"
+  
+  # State and cache directories
+  state_folder: "./state"
+  cache_folder: "./cache"
+
+# Audio processing configuration
+audio:
+  # Supported audio formats
+  # Add or remove formats as needed
+  formats:
+    - ".wav"
+    - ".mp3"
+    - ".m4a"
+    - ".flac"
+    - ".ogg"
+    - ".wma"
+    - ".aac"
+    - ".opus"
+  
+  # Maximum file size in MB
+  # Files larger than this will be skipped
+  max_file_size_mb: 500
+  
+  # Audio chunking settings for long recordings
+  # Splits audio into manageable chunks for processing
+  chunk_duration: 600  # 10 minutes in seconds
+  chunk_overlap: 30    # 30 seconds overlap between chunks
+  
+  # Audio conversion settings
+  # Convert all audio to WAV for consistent processing
+  convert_to_wav: true
+  sample_rate: 16000   # 16kHz is optimal for speech
+  channels: 1          # Mono audio
+  
+  # Silence detection (for future features)
+  silence_threshold: -40  # dB
+  silence_duration: 0.5   # seconds
+
+# Transcription configuration
+transcription:
+  # API endpoint - Examples:
+  # OpenAI: "https://api.openai.com/v1/audio/transcriptions"
+  # Local Whisper: "http://localhost:8000/v1/audio/transcriptions"
+  # Replicate: "https://api.replicate.com/v1/predictions"
+  api_endpoint: "https://api.openai.com/v1/audio/transcriptions"
+  
+  # API key (can also be set via environment variable)
+  # For OpenAI: OPENAI_API_KEY
+  # For Replicate: REPLICATE_API_TOKEN
+  api_key: "your-api-key-here"
+  
+  # Model to use
+  # OpenAI: "whisper-1"
+  # Local/Replicate: "whisper-large-v3", "whisper-large-v2"
+  model: "whisper-1"
+  
+  # Language code (ISO 639-1)
+  # Examples: "en" (English), "es" (Spanish), "fr" (French)
+  # Leave empty for auto-detection
+  language: ""
+  
+  # Temperature for sampling (0.0-1.0)
+  # Lower = more deterministic, Higher = more creative
+  temperature: 0.0
+  
+  # Prompt to guide the model
+  # Can include terminology, names, or context
+  prompt: ""
+  
+  # Response format
+  # Options: "json", "text", "srt", "verbose_json", "vtt"
+  response_format: "verbose_json"
+  
+  # Retry settings for failed requests
+  max_retries: 3
+  retry_delay: 5  # seconds
+  
+  # Request timeout in seconds
+  timeout: 300
+
+# Speaker diarization configuration
+diarization:
+  # Enable speaker diarization
+  # Identifies different speakers in the audio
+  enabled: true
+  
+  # Diarization method
+  # Options: "pyannote", "simple", "none"
+  method: "pyannote"
+  
+  # Minimum segment duration in seconds
+  # Segments shorter than this are merged
+  min_segment_duration: 2.0
+  
+  # Maximum number of speakers
+  # 0 for automatic detection
+  max_speakers: 0
+  
+  # Clustering settings for speaker identification
+  clustering:
+    method: "agglomerative"
+    threshold: 0.7
+
+# Transcript generation configuration
+transcript:
+  # Output format
+  # Options: "markdown", "txt", "json", "srt"
+  format: "markdown"
+  
+  # Include timestamps in transcript
+  include_timestamps: true
+  
+  # Timestamp format
+  # {timestamp} will be replaced with actual time
+  timestamp_format: "[{timestamp}]"
+  
+  # Speaker label format
+  # {speaker} will be replaced with speaker ID
+  speaker_format: "**{speaker}:**"
+  
+  # Include metadata header in transcript
+  include_metadata: true
+  
+  # Metadata fields to include
+  metadata_fields:
+    - "title"
+    - "date"
+    - "duration"
+    - "speakers"
+    - "audio_file"
+  
+  # Line width for text wrapping
+  # 0 for no wrapping
+  line_width: 0
+  
+  # Custom template file (optional)
+  # Path to Jinja2 template for custom formatting
+  template_file: ""
+
+# Archive configuration
+archive:
+  # Enable archiving of processed files
+  enabled: true
+  
+  # Archive directory (can be different from paths.archive_folder)
+  directory: "./archive"
+  
+  # Compression type
+  # Options: "zip", "tar", "none"
+  compression: "zip"
+  
+  # Retention period in days
+  # 0 for indefinite retention
+  retention_days: 30
+  
+  # Group archives by
+  # Options: "date", "speaker", "project"
+  group_by: "date"
+  
+  # Compress entire sessions (audio + transcript + metadata)
+  compress_sessions: true
+
+# Cache configuration
+cache:
+  # Enable caching for better performance
+  enabled: true
+  
+  # Cache directory
+  directory: "./cache"
+  
+  # Maximum items in memory cache
+  max_memory_items: 100
+  
+  # Maximum memory cache size in MB
+  max_memory_size_mb: 100
+  
+  # Cache time-to-live in seconds
+  ttl_seconds: 3600  # 1 hour
+  
+  # Enable disk-based cache
+  enable_disk_cache: true
+
+# Logging configuration
+logging:
+  # Console log level
+  # Options: DEBUG, INFO, WARNING, ERROR, CRITICAL
+  console_level: "INFO"
+  
+  # File log level (usually more verbose)
+  file_level: "DEBUG"
+  
+  # Log directory
+  log_dir: "./logs"
+  
+  # Maximum log file size in bytes
+  max_bytes: 10485760  # 10MB
+  
+  # Number of backup files to keep
+  backup_count: 5
+  
+  # Enable colored console output
+  use_colors: true
+  
+  # Enable JSON structured logs
+  enable_json_logs: false
+  
+  # Log format strings
+  console_format: "%(asctime)s - %(levelname)s - %(name)s - %(message)s"
+  file_format: "%(asctime)s - %(levelname)s - %(name)s - %(funcName)s:%(lineno)d - %(message)s"
+  
+  # Override log levels for specific modules
+  logger_levels:
+    watchdog: "WARNING"      # File system watcher
+    urllib3: "WARNING"       # HTTP library
+    requests: "WARNING"      # HTTP requests
+    pyannote: "INFO"        # Diarization library
+  
+  # Suppress noisy loggers
+  suppress_loggers:
+    - "matplotlib"
+    - "PIL"
+    - "numba"
+
+# Processing configuration
+processing:
+  # Number of worker threads for parallel processing
+  num_workers: 2
+  
+  # Maximum items in processing queue
+  queue_size: 100
+  
+  # Priority for different file types (lower = higher priority)
+  priorities:
+    ".wav": 1
+    ".mp3": 2
+    ".m4a": 2
+    default: 3
+  
+  # Batch processing size
+  batch_size: 1
+  
+  # Automatically retry failed files
+  auto_retry: true
+  
+  # Maximum retry attempts for failed files
+  max_retry_attempts: 3
+  
+  # Delay before retrying failed files (seconds)
+  retry_delay: 300  # 5 minutes
+
+# File watcher configuration
+watcher:
+  # Enable automatic file watching
+  enabled: true
+  
+  # Watch subdirectories recursively
+  recursive: true
+  
+  # Polling interval in seconds (fallback for systems without native events)
+  polling_interval: 1.0
+  
+  # Debounce time in seconds
+  # Wait this long after last change before processing
+  debounce_time: 2.0
+  
+  # Patterns to ignore
+  ignore_patterns:
+    - "*.tmp"      # Temporary files
+    - "*.temp"     # Temporary files
+    - "~*"         # Backup files
+    - ".*"         # Hidden files
+    - "*.part"     # Partial downloads
+
+# Integration configuration
+integration:
+  # Path to Obsidian vault (optional)
+  # If set, transcripts can be saved directly to vault
+  obsidian_vault: ""
+  
+  # Automatically open transcript in Obsidian
+  auto_open: false
+  
+  # Create daily notes for transcripts
+  create_daily_notes: false
+  
+  # Daily note date format
+  daily_note_format: "YYYY-MM-DD"
+  
+  # Default tags to add to all transcripts
+  default_tags:
+    - "transcript"
+    - "audio"
+    - "meeting"  # Add your own tags
+
+# Advanced configuration
+advanced:
+  # Enable debug mode (verbose output)
+  debug: false
+  
+  # Enable performance profiling
+  profiling: false
+  
+  # Memory limit in MB (0 for no limit)
+  # Process will stop accepting new files if limit exceeded
+  memory_limit: 0
+  
+  # CPU limit (0.0-1.0, where 1.0 = 100%)
+  # 0 for no limit
+  cpu_limit: 0
+  
+  # Automatically cleanup temporary files
+  cleanup_temp: true
+  
+  # Cleanup interval in hours
+  cleanup_interval: 24
+
+# Example environment variable overrides:
+# OBSIDIAN_SCRIBE_TRANSCRIPTION_API_KEY=your-api-key
+# OBSIDIAN_SCRIBE_PATHS_WATCH_FOLDER=/custom/audio/path
+# OBSIDIAN_SCRIBE_LOGGING_CONSOLE_LEVEL=DEBUG
