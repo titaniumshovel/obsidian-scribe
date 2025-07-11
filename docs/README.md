@@ -4,14 +4,21 @@ Welcome to the Obsidian Scribe documentation! This guide will help you set up, c
 
 ## Table of Contents
 
+### User Guides
 1. [Installation Guide](INSTALLATION.md) - How to install and set up Obsidian Scribe
 2. [Configuration Guide](CONFIGURATION.md) - Detailed configuration options
 3. [Usage Guide](USAGE.md) - How to use Obsidian Scribe effectively
-4. [API Reference](API_REFERENCE.md) - Detailed API documentation
-5. [Architecture Overview](ARCHITECTURE_OVERVIEW.md) - System design and components
-6. [Progress Tracking](PROGRESS_TRACKING.md) - Real-time diarization progress tracking
-7. [Troubleshooting](TROUBLESHOOTING.md) - Common issues and solutions
-8. [Contributing](CONTRIBUTING.md) - How to contribute to the project
+4. [Troubleshooting](TROUBLESHOOTING.md) - Common issues and solutions
+
+### Technical Documentation
+5. [API Reference](API_REFERENCE.md) - Detailed API documentation
+6. [Architecture Overview](ARCHITECTURE_OVERVIEW.md) - System design and components
+7. [Progress Tracking](PROGRESS_TRACKING.md) - Real-time diarization progress tracking
+8. [Implementation Plan](IMPLEMENTATION_PLAN.md) - Detailed development roadmap and technical specifications
+
+### Project Information
+9. [Contributing](CONTRIBUTING.md) - How to contribute to the project
+10. [Project Roadmap](../PROJECT_ROADMAP.md) - Strategic development roadmap
 
 ## Quick Start
 

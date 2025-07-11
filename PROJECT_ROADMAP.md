@@ -1,66 +1,73 @@
 # Obsidian Scribe Project Roadmap
 
 ## Current Status
-- **Phase**: Testing and Debugging
-- **Last Major Milestone**: Hugging Face integration with Windows symlink handling
-- **Current Issue**: WebM file detection problem after FFmpeg fixes
-- **Next Priority**: Complete end-to-end testing with real audio files
+- **Phase**: Feature Enhancement and Optimization
+- **Last Major Milestone**: Real-time progress tracking for speaker diarization implemented
+- **Recent Achievements**:
+  - WebM file detection and processing issues resolved
+  - Comprehensive progress tracking with time estimation (75s/MB CPU, 20s/MB GPU)
+  - End-to-end testing completed with real Obsidian Whisper audio files
+  - Documentation updated with progress tracking features
+- **Next Priority**: User experience improvements and optional diarization feature
 
 ## Immediate Priorities (Next 1-2 Weeks)
 
-### 1. Critical Bug Fixes
-- [ ] **WebM File Detection Issue**
-  - Debug why file watcher shows 0 files after FFmpeg fix
-  - Investigate file state management after failed processing
-  - Test file locking and permission scenarios
-  - Verify file watcher restart behavior
+> 📋 **Detailed Implementation Guide**: See [`docs/IMPLEMENTATION_PLAN.md`](docs/IMPLEMENTATION_PLAN.md) for complete technical specifications and code-level implementation details.
 
-- [ ] **FFmpeg Conversion Stability**
-  - Validate WebM to WAV conversion with large files
-  - Test audio chunking for files >25MB
-  - Ensure proper cleanup of temporary files
-  - Handle conversion timeouts gracefully
+### 1. Critical Bug Fixes ✅ COMPLETED
+- [x] **WebM File Detection Issue** ✅
+  - ✅ Debugged and resolved file watcher detection problems
+  - ✅ Fixed file state management after processing
+  - ✅ Tested file locking and permission scenarios
+  - ✅ Verified file watcher restart behavior
 
-- [ ] **Hugging Face Authentication**
-  - Resolve 401 authentication issue properly
-  - Implement proper token validation
-  - Add clear error messages for token problems
-  - Test fresh installation scenarios
+- [x] **FFmpeg Conversion Stability** ✅
+  - ✅ Validated WebM to WAV conversion with large files (tested up to 32.6MB)
+  - ✅ Audio chunking working properly for large files
+  - ✅ Proper cleanup of temporary files implemented
+  - ✅ Conversion timeouts handled gracefully
 
-### 2. Testing and Validation
-- [ ] **Complete Test Plan Execution**
-  - Run all tests in `/tests` folder systematically
-  - Document test results and any failures
-  - Create automated test suite for regression testing
-  - Test background operation scenarios
+- [x] **Hugging Face Authentication** ✅
+  - ✅ Resolved 401 authentication issues
+  - ✅ Implemented proper token validation
+  - ✅ Added clear error messages for token problems
+  - ✅ Tested fresh installation scenarios
 
-- [ ] **Real-world Usage Testing**
-  - Test with various audio formats and sizes
-  - Validate speaker diarization accuracy
-  - Test concurrent file processing
-  - Measure performance with large files
+### 2. User Experience Improvements 🔥 CURRENT FOCUS
 
-### 3. Documentation and User Experience
-- [ ] **README Enhancement**
-  - Add unique Obsidian Scribe features (awaiting user list)
-  - Create TL;DR quickstart section
-  - Include troubleshooting guide
-  - Add performance expectations
+#### **Phase 1: Optional Diarization** (Week 1)
+- [ ] **Enable/Disable Diarization Control**
+  - Leverage existing `diarization.enabled` config setting
+  - Add `--no-diarization` and `--enable-diarization` CLI flags
+  - Implement conditional processing in audio processor
+  - **Target**: Reduce processing time from 75s/MB to <30s for typical files
 
-- [ ] **Instruction Files Update**
-  - Detailed step-by-step setup instructions
-  - Windows-specific installation notes
-  - Hugging Face token setup with screenshots
-  - Common error resolution guide
+#### **Phase 2: Enhanced File Naming** (Week 2)
+- [ ] **Template-Based File Naming System**
+  - Configurable naming templates: `{date}_{time}_{source_name}_transcript`
+  - Support variables: `{timestamp}`, `{speaker_count}`, `{duration}`, `{language}`
+  - CLI override options: `--output-name`, `--naming-template`
+  - Conflict resolution and backward compatibility
 
-- [ ] **Allow Diarization to be Optional**
-  - Diarization takes long time, not always required
-  - Allow for optional enable/disable to speed up
-  - Document this in the README and other instruction guides
+#### **Phase 3: User Experience Polish** (Week 3)
+- [ ] **Enhanced Feedback and Documentation**
+  - Time savings messaging when diarization is skipped
+  - Comprehensive processing summaries
+  - Updated README with TL;DR quickstart section
+  - Complete troubleshooting guide
 
-- [ ] **Better File Naming**
-  - Give a more user friendly file naming convention
-  - Allow for users to name their files
+### 3. Testing and Validation ✅ LARGELY COMPLETED
+- [x] **Real-world Usage Testing** ✅
+  - ✅ Tested with various audio formats and sizes (WebM, up to 32.6MB)
+  - ✅ Validated speaker diarization accuracy with progress tracking
+  - ✅ Measured performance with large files (75s/MB baseline established)
+  - [ ] Test concurrent file processing scenarios
+
+- [ ] **Automated Test Suite Enhancement**
+  - Unit tests for optional diarization
+  - Integration tests for file naming templates
+  - Performance benchmarking suite
+  - Regression testing for backward compatibility
 
 ## Medium-term Goals (1-3 Months)
 
@@ -85,10 +92,11 @@
   - Timestamp accuracy improvements
 
 - [ ] **User Interface Improvements**
-  - Progress indicators for long operations
-  - Real-time processing status
-  - Configuration management UI
-  - Error reporting and recovery
+  - [x] ✅ Progress indicators for long operations (diarization progress tracking)
+  - [x] ✅ Real-time processing status (every 2 seconds with time estimates)
+  - [ ] Enhanced logging and processing summaries
+  - [ ] Configuration validation and error reporting
+  - [ ] Optional GUI for configuration management (future consideration)
 
 ### 3. Integration and Compatibility
 - [ ] **Obsidian Plugin Integration**
@@ -186,12 +194,56 @@
 
 ## Next Steps
 
-1. **Immediate**: Debug WebM file detection issue
-2. **This Week**: Complete end-to-end testing with real audio
-3. **Next Week**: Update all documentation with current state
-4. **Month 1**: Implement context management improvements
-5. **Month 2**: Begin native application planning
-6. **Month 3**: Release stable version with comprehensive documentation
+> 📋 **Implementation Details**: Complete technical specifications available in [`docs/IMPLEMENTATION_PLAN.md`](docs/IMPLEMENTATION_PLAN.md)
+
+### **Immediate (Next 3 Weeks)**
+1. **Week 1**: Optional diarization feature implementation
+   - Update `src/audio/processor.py` for conditional diarization
+   - Add CLI flags to `src/main.py`
+   - Implement time savings messaging
+   
+2. **Week 2**: Enhanced file naming system
+   - Template-based naming in `src/transcript/markdown_writer.py`
+   - Configuration extensions in `config.yaml`
+   - CLI override support
+   
+3. **Week 3**: User experience polish and documentation
+   - Enhanced logging and feedback
+   - README updates with quickstart guide
+   - Comprehensive testing and validation
+
+### **Medium-term (Month 2-3)**
+4. **Month 2**: Advanced features and optimization
+   - Performance improvements and GPU acceleration
+   - Advanced audio processing options
+   - Integration enhancements
+   
+5. **Month 3**: Release preparation
+   - Comprehensive documentation
+   - User acceptance testing
+   - Stable version release with full feature set
+
+## Recent Completed Work ✅
+
+### Progress Tracking Implementation (July 2025) ✅
+- **Real-time Progress Updates**: Implemented comprehensive progress tracking for speaker diarization
+- **Time Estimation Algorithm**: Developed empirical time estimation (75s/MB CPU, 20s/MB GPU)
+- **User Experience**: Added progress messages showing elapsed time, estimated time, and percentage
+- **Threading**: Non-blocking progress updates every 2 seconds
+- **Documentation**: Created [`docs/PROGRESS_TRACKING.md`](docs/PROGRESS_TRACKING.md) with implementation details
+- **Testing**: Validated with multiple file sizes and calibrated estimation accuracy
+
+### WebM Processing Resolution (July 2025) ✅
+- **File Detection**: Resolved WebM file detection and processing issues
+- **Format Support**: Added comprehensive WebM support to file manager and converter
+- **End-to-End Testing**: Successfully tested with real Obsidian Whisper audio files
+- **Error Handling**: Improved error messages and recovery for file processing failures
+
+### Implementation Planning (July 2025) ✅
+- **Codebase Analysis**: Comprehensive analysis of current implementation
+- **Strategic Planning**: Created detailed [`docs/IMPLEMENTATION_PLAN.md`](docs/IMPLEMENTATION_PLAN.md)
+- **Technical Specifications**: Code-level implementation details for next phase
+- **Timeline Definition**: 3-week implementation schedule with clear milestones
 
 ---
 
