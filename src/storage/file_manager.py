@@ -61,7 +61,7 @@ class FileManager:
             return False
             
         # Check file extension
-        valid_extensions = {'.wav', '.mp3', '.m4a', '.flac', '.ogg', '.wma', '.aac', '.opus'}
+        valid_extensions = {'.wav', '.mp3', '.m4a', '.flac', '.ogg', '.wma', '.aac', '.opus', '.webm'}
         if file_path.suffix.lower() not in valid_extensions:
             return False
             

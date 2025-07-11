@@ -9,8 +9,9 @@ Welcome to the Obsidian Scribe documentation! This guide will help you set up, c
 3. [Usage Guide](USAGE.md) - How to use Obsidian Scribe effectively
 4. [API Reference](API_REFERENCE.md) - Detailed API documentation
 5. [Architecture Overview](ARCHITECTURE_OVERVIEW.md) - System design and components
-6. [Troubleshooting](TROUBLESHOOTING.md) - Common issues and solutions
-7. [Contributing](CONTRIBUTING.md) - How to contribute to the project
+6. [Progress Tracking](PROGRESS_TRACKING.md) - Real-time diarization progress tracking
+7. [Troubleshooting](TROUBLESHOOTING.md) - Common issues and solutions
+8. [Contributing](CONTRIBUTING.md) - How to contribute to the project
 
 ## Quick Start
 
@@ -37,6 +38,7 @@ Welcome to the Obsidian Scribe documentation! This guide will help you set up, c
 
 - **Automatic File Watching**: Monitors specified folders for new audio files
 - **Speaker Diarization**: Identifies different speakers in audio recordings
+- **Real-Time Progress Tracking**: Shows diarization progress with time estimates
 - **High-Quality Transcription**: Uses OpenAI Whisper for accurate transcription
 - **Obsidian Integration**: Generates Markdown files compatible with Obsidian
 - **Smart Chunking**: Handles long audio files by intelligent chunking

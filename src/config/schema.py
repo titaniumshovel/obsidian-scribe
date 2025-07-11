@@ -118,6 +118,13 @@ class ConfigSchema:
             if not isinstance(model, str):
                 raise ValueError("diarization model must be a string")
                 
+        # Validate hf_token
+        if 'hf_token' in diarization:
+            token = diarization['hf_token']
+            # Allow empty string (will check environment variable)
+            if not isinstance(token, str):
+                raise ValueError("hf_token must be a string")
+                
         # Validate speaker counts
         if 'min_speakers' in diarization:
             min_speakers = diarization['min_speakers']
@@ -126,12 +133,13 @@ class ConfigSchema:
                 
         if 'max_speakers' in diarization:
             max_speakers = diarization['max_speakers']
-            if not isinstance(max_speakers, int) or max_speakers < 1:
-                raise ValueError("max_speakers must be a positive integer")
+            if not isinstance(max_speakers, int) or max_speakers < 0:
+                raise ValueError("max_speakers must be a non-negative integer (0 for automatic)")
                 
         # Validate min/max relationship
         if 'min_speakers' in diarization and 'max_speakers' in diarization:
-            if diarization['min_speakers'] > diarization['max_speakers']:
+            # Skip validation if max_speakers is 0 (automatic detection)
+            if diarization['max_speakers'] > 0 and diarization['min_speakers'] > diarization['max_speakers']:
                 raise ValueError("min_speakers cannot be greater than max_speakers")
                 
         # Validate min segment duration
@@ -157,8 +165,9 @@ class ConfigSchema:
         # Validate language
         if 'language' in transcription:
             language = transcription['language']
-            if not isinstance(language, str) or len(language) != 2:
-                raise ValueError("language must be a 2-letter language code")
+            # Allow empty string for auto-detection
+            if language and (not isinstance(language, str) or len(language) != 2):
+                raise ValueError("language must be a 2-letter language code or empty for auto-detection")
                 
         # Validate temperature
         if 'temperature' in transcription:

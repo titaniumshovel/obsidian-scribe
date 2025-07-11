@@ -33,6 +33,10 @@ class FileWatcher:
         self.config = config
         self.logger = logging.getLogger(__name__)
         
+        # Set back-reference so processor can clear files from processing set
+        if hasattr(processor, 'file_watcher'):
+            processor.file_watcher = self
+        
         # Create queue manager
         self.queue_manager = QueueManager()
         
@@ -59,8 +63,8 @@ class FileWatcher:
         
         # Start the observer
         self._observer = Observer()
-        handler = AudioFileHandler(self.queue_manager, self.config)
-        self._observer.schedule(handler, str(self.watch_folder), recursive=False)
+        self._handler = AudioFileHandler(self.queue_manager, self.config)
+        self._observer.schedule(self._handler, str(self.watch_folder), recursive=False)
         self._observer.start()
         
         # Start queue processing thread
@@ -68,7 +72,7 @@ class FileWatcher:
         self._queue_thread.start()
         
         # Scan existing files
-        self._scan_existing_files(handler)
+        self._scan_existing_files(self._handler)
         
         self.logger.info("File watcher started successfully")
         
@@ -108,7 +112,12 @@ class FileWatcher:
             for file_path in self.watch_folder.iterdir():
                 if file_path.is_file():
                     full_path = str(file_path)
-                    if handler._is_valid_audio_file(full_path) and handler._is_file_ready(full_path):
+                    if handler._is_valid_audio_file(full_path):
+                        # For existing files, assume they are ready
+                        # Mark the file size as stable by setting it twice
+                        file_size = file_path.stat().st_size
+                        handler._file_sizes[full_path] = file_size
+                        
                         self.logger.info(f"Found existing audio file: {full_path}")
                         self.queue_manager.add_file(full_path)
                         handler._processing_files.add(full_path)
@@ -153,3 +162,8 @@ class FileWatcher:
             'running': self._running,
             'watch_folder': str(self.watch_folder)
         }
+        
+    def clear_processing_file(self, file_path: str):
+        """Clear a file from the processing set."""
+        if hasattr(self, '_handler') and self._handler:
+            self._handler.clear_processing_file(file_path)

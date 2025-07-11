@@ -5,6 +5,7 @@
 Obsidian Scribe is a Python application designed to complement the Obsidian Whisper plugin by providing advanced audio processing capabilities. While Whisper handles recording, Obsidian Scribe adds speaker diarization, smart file chunking for large recordings, and enhanced Markdown formatting optimized for Obsidian.
 
 ### Complementary Workflow
+
 - **Obsidian Whisper Plugin**: Records audio using VoiceMeeter mixed input
 - **Obsidian Scribe**: Automatically processes recordings with advanced features
 
@@ -25,11 +26,13 @@ Obsidian Scribe is a Python application designed to complement the Obsidian Whis
 Complete documentation is available in the `docs/` directory:
 
 ### Getting Started
+
 - **[Installation Guide](docs/INSTALLATION.md)** - Prerequisites, setup, and troubleshooting
 - **[Usage Guide](docs/USAGE.md)** - How to use Obsidian Scribe effectively
 - **[Configuration Guide](docs/CONFIGURATION.md)** - All configuration options explained
 
 ### Technical Documentation
+
 - **[API Reference](docs/API_REFERENCE.md)** - Complete API documentation for all modules
 - **[Architecture Overview](docs/ARCHITECTURE_OVERVIEW.md)** - System design and component interactions
 
@@ -161,9 +164,11 @@ audio_file: "[[Audio/Meeting-2024-01-15.wav]]"
 ## Installation
 
 ### Prerequisites
+
 - Python 3.8 or higher
 - FFmpeg installed and in PATH
 - Git (for cloning the repository)
+- Hugging Face account (free) for speaker diarization
 
 ### Quick Install
 
@@ -178,6 +183,73 @@ pip install -e .
 # Or use make
 make install
 ```
+
+### Setting Up Speaker Diarization (Optional but Recommended)
+
+Speaker diarization identifies different speakers in your audio recordings. To enable this feature:
+
+1. **Create a free Hugging Face account**
+   - Go to <https://huggingface.co/join>
+   - Sign up with your email
+
+2. **Accept the conditions for BOTH pyannote models** (Required)
+   - Visit <https://hf.co/pyannote/speaker-diarization>
+     - Click "Agree and access repository"
+     - You must be logged in to accept
+   - Visit <https://hf.co/pyannote/segmentation>
+     - Click "Agree and access repository"
+     - You must be logged in to accept
+
+3. **Create an access token**
+   - Visit <https://huggingface.co/settings/tokens>
+   - Click "New token"
+   - Name it (e.g., "obsidian-scribe")
+   - Set permission to "read"
+   - Copy the generated token
+
+4. **Configure the token** (choose one method):
+
+   **Option A - Environment Variable (Recommended):**
+
+   ```bash
+   # Add to your .env file
+   HUGGING_FACE_TOKEN=your_token_here
+   ```
+
+   **Option B - Configuration File:**
+
+   ```yaml
+   # Add to config.yaml under diarization section
+   diarization:
+     hf_token: "your_token_here"
+   ```
+
+> **Note:** Without a Hugging Face token, the application will still work but without speaker identification features.
+
+### Windows Users - Important Note
+
+On Windows, speaker diarization requires either Administrator privileges or Developer Mode enabled due to symlink creation requirements. If you encounter a "required privilege is not held" error:
+
+**Option 1 - Run as Administrator (Easiest):**
+
+```bash
+# Right-click on Command Prompt or PowerShell
+# Select "Run as Administrator"
+# Then run obsidian-scribe normally
+```
+
+**Option 2 - Enable Developer Mode:**
+
+1. Open Windows Settings
+2. Go to Update & Security → For developers
+3. Enable "Developer Mode"
+4. Restart your terminal
+
+**Option 3 - Continue without Speaker Diarization:**
+
+- The application will automatically disable speaker diarization if it can't create symlinks
+- All other features (transcription, formatting, etc.) will work normally
+- You'll just get a single-speaker transcript
 
 For detailed installation instructions, see [docs/INSTALLATION.md](docs/INSTALLATION.md).
 
@@ -202,11 +274,13 @@ obsidian-scribe/
 ## Configuration
 
 1. Copy the example configuration:
+
    ```bash
    cp config.example.yaml config.yaml
    ```
 
 2. Edit `config.yaml` with your settings:
+
    ```yaml
    obsidian_scribe:
      paths:
@@ -225,6 +299,7 @@ obsidian-scribe/
    ```
 
 3. Set your API key:
+
    ```bash
    export OPENAI_API_KEY="your-api-key-here"
    ```
@@ -267,22 +342,28 @@ For more usage examples, see [docs/USAGE.md](docs/USAGE.md).
 ## Complete Recording & Processing Workflow
 
 ### 1. One-Time Setup
+
 - **Install VoiceMeeter** - Mix multiple audio sources (see [VOICEMEETER_SETUP.md](VOICEMEETER_SETUP.md))
 - **Configure Obsidian Whisper Plugin**:
+
   ```yaml
   Save recording: ON
   Recordings folder: "Audio/"
   Save transcription: OFF  # Let Obsidian Scribe handle this
   ```
+
 - **Install & Configure Obsidian Scribe** - Monitor Audio folder
 
 ### 2. Recording Process
+
 1. **Start VoiceMeeter** - Ensures audio mixing is active
 2. **Use Obsidian Whisper Plugin** - Record meeting/conversation
 3. **Audio saved to vault** - Whisper saves to Audio folder
 
 ### 3. Automatic Processing
+
 Obsidian Scribe automatically:
+
 - Detects new audio files
 - Splits large files if >25MB
 - Performs speaker diarization
@@ -291,6 +372,7 @@ Obsidian Scribe automatically:
 - Archives processed audio
 
 ### Why Use Both Tools?
+
 - **Whisper Plugin**: Proven recording interface within Obsidian
 - **Obsidian Scribe**: Adds capabilities Whisper doesn't have:
   - Multi-speaker identification

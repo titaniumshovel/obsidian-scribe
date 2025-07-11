@@ -119,7 +119,7 @@ class MarkdownWriter:
             'audio_file': audio_filename,
             'duration': self._format_duration(metadata.get('duration', 0)),
             'speakers': metadata.get('speaker_count', 0),
-            'language': metadata.get('language', 'en'),
+            'language': metadata.get('language') or 'en',
             'word_count': metadata.get('word_count', 0)
         }
         
@@ -177,7 +177,8 @@ class MarkdownWriter:
         duration = self._format_duration(metadata.get('duration', 0))
         lines.append(f"- **Duration**: {duration}")
         lines.append(f"- **Speakers**: {metadata.get('speaker_count', 0)}")
-        lines.append(f"- **Language**: {metadata.get('language', 'en').upper()}")
+        language = metadata.get('language') or 'en'
+        lines.append(f"- **Language**: {language.upper()}")
         lines.append(f"- **Words**: {metadata.get('word_count', 0):,}")
         
         # Speaker breakdown if available

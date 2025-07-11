@@ -13,6 +13,10 @@ import time
 from pathlib import Path
 from typing import Optional
 
+# Load environment variables from .env file
+from dotenv import load_dotenv
+load_dotenv()
+
 # Add parent directory to path for imports during development
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -55,10 +59,15 @@ class ObsidianScribe:
         
         # Initialize components
         self.processor = AudioProcessor(self.config)
+        
+        # Prepare watcher config with audio formats
+        watcher_config = self.config['watcher'].copy()
+        watcher_config['file_extensions'] = self.config['audio']['formats']
+        
         self.file_watcher = FileWatcher(
-            watch_folder=self.config['paths']['audio_folder'],
+            watch_folder=self.config['paths']['watch_folder'],
             processor=self.processor,
-            config=self.config['watcher']
+            config=watcher_config
         )
         
         self.logger.info("Setup complete")
@@ -76,11 +85,20 @@ class ObsidianScribe:
         
         self.logger.info("Obsidian Scribe is running. Press Ctrl+C to stop.")
         
-        # Main event loop
+        # Main event loop with status monitoring
+        last_status_time = time.time()
+        status_interval = 30  # Show status every 30 seconds
+        
         try:
             while self._running:
                 time.sleep(1)
-                # TODO: Add health checks and status monitoring
+                
+                # Show periodic status updates
+                current_time = time.time()
+                if current_time - last_status_time >= status_interval:
+                    self._show_status()
+                    last_status_time = current_time
+                    
         except KeyboardInterrupt:
             self.logger.info("Received interrupt signal")
             self.stop()
@@ -97,6 +115,27 @@ class ObsidianScribe:
             self.processor.stop()
             
         self.logger.info("Obsidian Scribe stopped")
+        
+    def _show_status(self):
+        """Show current application status."""
+        # Get queue sizes
+        watcher_queue = self.file_watcher.get_queue_size() if self.file_watcher else 0
+        processor_queue = self.processor.get_queue_size() if self.processor else 0
+        
+        # Get processor stats
+        processor_stats = self.processor.get_stats() if self.processor else {}
+        
+        # Log status
+        self.logger.info("=" * 50)
+        self.logger.info("STATUS UPDATE:")
+        self.logger.info(f"  Watching: {self.config['paths']['watch_folder']}")
+        self.logger.info(f"  Watcher queue: {watcher_queue} files")
+        self.logger.info(f"  Processor queue: {processor_queue} files")
+        self.logger.info(f"  Files processed: {processor_stats.get('processed', 0)}")
+        self.logger.info(f"  Files failed: {processor_stats.get('failed', 0)}")
+        self.logger.info(f"  Total processing time: {processor_stats.get('total_time', 0):.1f}s")
+        self.logger.info("  System is running normally...")
+        self.logger.info("=" * 50)
         
     def run(self):
         """Run the application."""
@@ -167,11 +206,15 @@ def main():
     args = parse_arguments()
     
     # Set up logging
-    log_file = args.log_file or Path('obsidian_scribe.log')
-    setup_logging(
-        level=getattr(logging, args.log_level),
-        log_file=log_file
-    )
+    log_config = {
+        'logging': {
+            'console_level': args.log_level,
+            'file_level': 'DEBUG',
+            'log_dir': './logs',
+            'use_colors': True
+        }
+    }
+    setup_logging(log_config)
     
     logger = logging.getLogger(__name__)
     logger.info("=" * 60)
