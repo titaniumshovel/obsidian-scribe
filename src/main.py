@@ -198,6 +198,18 @@ Examples:
         version='Obsidian Scribe 0.1.0'
     )
     
+    parser.add_argument(
+        '--no-diarization',
+        action='store_true',
+        help='Skip speaker diarization for faster processing'
+    )
+    
+    parser.add_argument(
+        '--enable-diarization',
+        action='store_true',
+        help='Force enable speaker diarization (overrides config)'
+    )
+    
     return parser.parse_args()
 
 
@@ -229,6 +241,14 @@ def main():
         config_overrides['paths.audio_folder'] = str(args.watch)
     if args.output:
         config_overrides['paths.transcript_folder'] = str(args.output)
+    
+    # Handle diarization overrides
+    if args.no_diarization:
+        config_overrides['diarization.enabled'] = False
+        logger.info("Diarization disabled via command line")
+    elif args.enable_diarization:
+        config_overrides['diarization.enabled'] = True
+        logger.info("Diarization enabled via command line")
     
     # Create and run the application
     app = ObsidianScribe(config_path=args.config)

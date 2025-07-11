@@ -35,7 +35,7 @@ class TranscriptGenerator:
         self.markdown_config = config.get('markdown', {})
         self.include_timestamps = self.markdown_config.get('include_timestamps', True)
         
-    def generate(self, audio_path: str, diarization_result: Dict, 
+    def generate(self, audio_path: str, diarization_result: Optional[Dict], 
                 transcription_result: Dict) -> str:
         """
         Generate a transcript from diarization and transcription results.
@@ -52,15 +52,20 @@ class TranscriptGenerator:
             self.logger.info(f"Generating transcript for: {audio_path}")
             
             # Extract data from results
-            speaker_segments = diarization_result.get('segments', [])
-            transcription_segments = transcription_result.get('segments', [])
+            if diarization_result is not None:
+                speaker_segments = diarization_result.get('segments', [])
+                # Align speaker segments with transcription
+                transcription_segments = transcription_result.get('segments', [])
+                aligned_segments = self._align_segments(speaker_segments, transcription_segments)
+                # Group segments by speaker
+                speaker_groups = self._group_by_speaker(aligned_segments)
+            else:
+                # No diarization - create single speaker transcript
+                self.logger.info("No diarization results, creating single-speaker transcript")
+                transcription_segments = transcription_result.get('segments', [])
+                speaker_groups = self._create_single_speaker_groups(transcription_segments)
+            
             full_text = transcription_result.get('text', '')
-            
-            # Align speaker segments with transcription
-            aligned_segments = self._align_segments(speaker_segments, transcription_segments)
-            
-            # Group segments by speaker
-            speaker_groups = self._group_by_speaker(aligned_segments)
             
             # Generate metadata
             metadata = self._generate_metadata(audio_path, diarization_result, transcription_result)
@@ -196,7 +201,33 @@ class TranscriptGenerator:
             
         return groups
         
-    def _generate_metadata(self, audio_path: str, diarization_result: Dict,
+    def _create_single_speaker_groups(self, transcription_segments: List[Dict]) -> Dict:
+        """
+        Create speaker groups for single-speaker transcript (no diarization).
+        
+        Args:
+            transcription_segments: Segments from transcription
+            
+        Returns:
+            Dictionary with single speaker group
+        """
+        if not transcription_segments:
+            return {'Speaker 1': []}
+        
+        # Convert transcription segments to speaker format
+        speaker_segments = []
+        for segment in transcription_segments:
+            speaker_segments.append({
+                'start': segment.get('start', 0),
+                'end': segment.get('end', 0),
+                'text': segment.get('text', ''),
+                'speaker': 'Speaker 1',
+                'confidence': segment.get('no_speech_prob', 0.0)
+            })
+        
+        return {'Speaker 1': speaker_segments}
+        
+    def _generate_metadata(self, audio_path: str, diarization_result: Optional[Dict],
                           transcription_result: Dict) -> Dict:
         """
         Generate metadata for the transcript.
@@ -212,12 +243,12 @@ class TranscriptGenerator:
         audio_file = Path(audio_path)
         
         # Calculate statistics
-        speakers = diarization_result.get('speakers', [])
-        segments = diarization_result.get('segments', [])
-        
-        # Get speaker statistics
-        speaker_stats = {}
-        if 'segments' in diarization_result:
+        if diarization_result is not None:
+            speakers = diarization_result.get('speakers', [])
+            segments = diarization_result.get('segments', [])
+            
+            # Get speaker statistics
+            speaker_stats = {}
             for segment in segments:
                 speaker = segment.get('speaker', 'UNKNOWN')
                 if speaker not in speaker_stats:
@@ -227,6 +258,11 @@ class TranscriptGenerator:
                     }
                 speaker_stats[speaker]['duration'] += segment.get('duration', 0)
                 speaker_stats[speaker]['segment_count'] += 1
+        else:
+            # No diarization - single speaker
+            speakers = ['Speaker 1']
+            segments = transcription_result.get('segments', [])
+            speaker_stats = {'Speaker 1': {'duration': 0, 'segment_count': len(segments)}}
                 
         metadata = {
             'title': f"Transcript: {audio_file.stem}",
