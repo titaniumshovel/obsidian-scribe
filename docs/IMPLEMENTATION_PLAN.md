@@ -345,6 +345,170 @@ def _validate_transcript_naming(self, naming: Dict[str, Any]):
 - Performance benchmarking at each step
 - User acceptance testing before release
 
+## Long-term Goals
+
+### Model Version Management (Month 4-6)
+
+#### 🎯 **Objective**
+Implement a hybrid model versioning system to address version compatibility warnings and provide users with flexibility between stability and latest features.
+
+#### 📋 **Technical Implementation**
+
+##### 1. Configuration Schema Enhancement
+**File**: [`config.yaml`](config.yaml)
+
+```yaml
+diarization:
+  enabled: true
+  method: "pyannote"
+  
+  # Model version management
+  model_version: "stable"  # Options: stable, latest, legacy, custom
+  models:
+    stable:
+      name: "pyannote/speaker-diarization@2.1"
+      min_pyannote_version: "2.1.0"
+      max_pyannote_version: "2.2.0"
+      torch_version: "1.13.1"
+      verified: true
+    latest:
+      name: "pyannote/speaker-diarization-3.1"
+      min_pyannote_version: "3.1.0"
+      max_pyannote_version: "4.0.0"
+      torch_version: "2.0.0"
+      verified: false
+    legacy:
+      name: "pyannote/speaker-diarization"
+      min_pyannote_version: "0.0.1"
+      max_pyannote_version: "1.0.0"
+      torch_version: "1.10.0"
+      verified: true
+    custom:
+      name: ""  # User-specified model
+      requirements_file: ""  # User-specified requirements
+```
+
+##### 2. Dynamic Model Loading System
+**File**: [`src/audio/diarizer.py`](src/audio/diarizer.py)
+
+```python
+def _load_pipeline(self):
+    """Load the appropriate model based on configuration."""
+    model_version = self.config['diarization'].get('model_version', 'stable')
+    model_config = self.config['diarization']['models'][model_version]
+    
+    # Check version compatibility
+    if not self._check_version_compatibility(model_config):
+        self.logger.warning(f"Version mismatch detected for {model_version} model")
+        # Offer to switch to compatible version or continue with warnings
+    
+    try:
+        self.pipeline = Pipeline.from_pretrained(
+            model_config['name'],
+            use_auth_token=self.hf_token
+        )
+        self.logger.info(f"Successfully loaded {model_version} model: {model_config['name']}")
+    except Exception as e:
+        self.logger.error(f"Failed to load {model_version} model: {e}")
+        # Fallback logic
+```
+
+##### 3. Version Compatibility Checker
+**New File**: `src/utils/version_checker.py`
+
+```python
+class VersionChecker:
+    """Check and manage dependency version compatibility."""
+    
+    def check_environment(self, model_config: Dict) -> Dict[str, Any]:
+        """Check if current environment matches model requirements."""
+        import pyannote.audio
+        import torch
+        
+        results = {
+            'compatible': True,
+            'warnings': [],
+            'errors': []
+        }
+        
+        # Check pyannote.audio version
+        current_pyannote = pyannote.audio.__version__
+        if not self._version_in_range(current_pyannote,
+                                     model_config.get('min_pyannote_version'),
+                                     model_config.get('max_pyannote_version')):
+            results['warnings'].append(
+                f"pyannote.audio version {current_pyannote} may not be compatible"
+            )
+        
+        # Similar checks for torch, pytorch-lightning, etc.
+        return results
+```
+
+##### 4. CLI Enhancement
+**File**: [`src/main.py`](src/main.py)
+
+```python
+parser.add_argument(
+    '--model-version',
+    choices=['stable', 'latest', 'legacy', 'custom'],
+    help='Select diarization model version (default: stable)'
+)
+
+parser.add_argument(
+    '--check-compatibility',
+    action='store_true',
+    help='Check version compatibility and exit'
+)
+```
+
+##### 5. Environment Management
+**New Files**:
+- `environments/stable-env.yml` - Stable version environment
+- `environments/latest-env.yml` - Latest features environment
+- `environments/legacy-env.yml` - Legacy compatibility environment
+
+#### 🧪 **Testing Strategy**
+
+1. **Compatibility Matrix Testing**
+   - Test each model version with different dependency versions
+   - Document which combinations work best
+   - Create automated compatibility tests
+
+2. **Performance Benchmarking**
+   - Compare accuracy across model versions
+   - Measure processing speed differences
+   - Document trade-offs
+
+3. **Migration Testing**
+   - Test upgrading from one model version to another
+   - Ensure smooth transitions
+   - Provide migration guides
+
+#### 📊 **Success Metrics**
+
+- **Version Flexibility**: Users can choose between 3+ model versions
+- **Compatibility Warnings**: Clear warnings before issues occur
+- **Fallback Success**: 100% graceful fallback when models fail
+- **Documentation**: Complete compatibility matrix published
+- **User Satisfaction**: Reduced version-related support issues
+
+#### 🗓️ **Implementation Timeline**
+
+**Month 4**: Research and Design
+- Survey available models and versions
+- Design compatibility checking system
+- Create environment specifications
+
+**Month 5**: Implementation
+- Implement dynamic model loading
+- Create version compatibility checker
+- Add CLI enhancements
+
+**Month 6**: Testing and Documentation
+- Comprehensive compatibility testing
+- Performance benchmarking
+- User documentation and guides
+
 ---
 
 *This implementation plan serves as the detailed technical guide for executing the strategic objectives outlined in PROJECT_ROADMAP.md. It should be updated as implementation progresses and new requirements are discovered.*
