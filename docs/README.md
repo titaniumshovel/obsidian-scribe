@@ -12,13 +12,19 @@ Welcome to the Obsidian Scribe documentation! This guide will help you set up, c
 
 ### Technical Documentation
 5. [API Reference](API_REFERENCE.md) - Detailed API documentation
-6. [Architecture Overview](ARCHITECTURE_OVERVIEW.md) - System design and components
+6. [Architecture Overview](technical/ARCHITECTURE.md) - System design and components
 7. [Progress Tracking](PROGRESS_TRACKING.md) - Real-time diarization progress tracking
 8. [Implementation Plan](IMPLEMENTATION_PLAN.md) - Detailed development roadmap and technical specifications
+9. [Technical Decisions](technical/TECHNICAL_DECISIONS.md) - Rationale for technology choices
+10. [Configuration Schema](technical/CONFIG_SCHEMA.md) - Complete configuration reference
+11. [Audio Chunking](technical/AUDIO_CHUNKING.md) - Audio processing strategy
+12. [VoiceMeeter Setup](technical/VOICEMEETER_SETUP.md) - Audio routing configuration
+13. [Whisper Integration](technical/WHISPER_INTEGRATION.md) - Integration guide
 
 ### Project Information
-9. [Contributing](CONTRIBUTING.md) - How to contribute to the project
-10. [Project Roadmap](../PROJECT_ROADMAP.md) - Strategic development roadmap
+14. [Contributing](CONTRIBUTING.md) - How to contribute to the project
+15. [Project Roadmap](project/PROJECT_ROADMAP.md) - Strategic development roadmap
+16. [Project Structure](project/PROJECT_STRUCTURE.md) - Detailed project organization
 
 ## Quick Start
 

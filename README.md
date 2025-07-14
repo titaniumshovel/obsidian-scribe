@@ -9,6 +9,36 @@ Obsidian Scribe is a Python application designed to complement the Obsidian Whis
 - **Obsidian Whisper Plugin**: Records audio using VoiceMeeter mixed input
 - **Obsidian Scribe**: Automatically processes recordings with advanced features
 
+## 🚀 TL;DR - Quick Setup
+
+**Want to get up and running in 5 minutes?**
+
+```bash
+# 1. Clone and install
+git clone https://github.com/yourusername/obsidian-scribe.git
+cd obsidian-scribe
+pip install -e .
+
+# 2. Setup config
+cp config.example.yaml config.yaml
+# Edit config.yaml - set your audio/transcript paths
+
+# 3. Set API key
+export OPENAI_API_KEY="your-api-key-here"
+
+# 4. Optional: Enable speaker diarization
+export HUGGING_FACE_TOKEN="your-hf-token-here"  # Get from https://hf.co/settings/tokens
+
+# 5. Run it!
+obsidian-scribe
+
+# Drop audio files in your Audio folder and watch the magic happen! ✨
+```
+
+**Pro tip**: Use `obsidian-scribe --debug` to see detailed progress. Files >25MB are automatically chunked.
+
+---
+
 ## Key Features
 
 - 🎙️ **Automatic Audio Processing**: Monitors Audio folder for new .wav/.mp3 files
@@ -34,11 +64,11 @@ Complete documentation is available in the `docs/` directory:
 ### Technical Documentation
 
 - **[API Reference](docs/API_REFERENCE.md)** - Complete API documentation for all modules
-- **[Architecture Overview](docs/ARCHITECTURE_OVERVIEW.md)** - System design and component interactions
+- **[Architecture Overview](docs/technical/ARCHITECTURE.md)** - System design and component interactions
 
 ### Architecture Documents
 
-1. **[ARCHITECTURE.md](ARCHITECTURE.md)** - Comprehensive system architecture including:
+1. **[ARCHITECTURE.md](docs/technical/ARCHITECTURE.md)** - Comprehensive system architecture including:
    - High-level component design
    - Component interactions and data flow
    - Detailed component descriptions
@@ -46,7 +76,7 @@ Complete documentation is available in the `docs/` directory:
    - Security considerations
    - Performance optimizations
 
-2. **[PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md)** - Detailed project organization including:
+2. **[PROJECT_STRUCTURE.md](docs/project/PROJECT_STRUCTURE.md)** - Detailed project organization including:
    - Complete directory layout
    - Module descriptions
    - File naming conventions
@@ -54,33 +84,33 @@ Complete documentation is available in the `docs/` directory:
    - Testing structure
    - Development workflow
 
-3. **[TECHNICAL_DECISIONS.md](TECHNICAL_DECISIONS.md)** - Rationale for technology choices:
+3. **[TECHNICAL_DECISIONS.md](docs/technical/TECHNICAL_DECISIONS.md)** - Rationale for technology choices:
    - Library selection (pyannote.audio vs whisper-diarization)
    - API vs local model decisions
    - Architectural pattern choices
    - Performance trade-offs
    - Rejected alternatives
 
-4. **[CONFIG_SCHEMA.md](CONFIG_SCHEMA.md)** - Complete configuration reference:
+4. **[CONFIG_SCHEMA.md](docs/technical/CONFIG_SCHEMA.md)** - Complete configuration reference:
    - All configuration options
    - Environment variable overrides
    - Configuration profiles
    - Validation rules
    - Best practices
 
-5. **[VOICEMEETER_SETUP.md](VOICEMEETER_SETUP.md)** - VoiceMeeter configuration guide:
+5. **[VOICEMEETER_SETUP.md](docs/technical/VOICEMEETER_SETUP.md)** - VoiceMeeter configuration guide:
    - Windows audio routing setup
    - Mixing microphone and Teams audio
    - Integration with Obsidian Whisper plugin
    - Troubleshooting tips
 
-6. **[AUDIO_CHUNKING.md](AUDIO_CHUNKING.md)** - Audio chunking strategy:
+6. **[AUDIO_CHUNKING.md](docs/technical/AUDIO_CHUNKING.md)** - Audio chunking strategy:
    - Handling the 25MB API limit
    - Smart splitting with silence detection
    - Fallback strategies
    - Integration with diarization
 
-7. **[WHISPER_INTEGRATION.md](WHISPER_INTEGRATION.md)** - Integration guide:
+7. **[WHISPER_INTEGRATION.md](docs/technical/WHISPER_INTEGRATION.md)** - Integration guide:
    - Configuring both tools to work together
    - Workflow scenarios
    - Best practices

@@ -289,6 +289,10 @@ class AudioProcessor:
             self.logger.info("Archiving processed file...")
             self.archive_manager.archive_file(file_path)
             
+            # Remove original file from input folder after successful archiving
+            self.logger.info(f"Removing original file from input folder: {file_path}")
+            self.file_manager.delete_file(file_path)
+            
             # Clean up temporary files
             if converted_path != file_path:
                 self.file_manager.delete_file(converted_path)

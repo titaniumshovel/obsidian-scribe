@@ -65,7 +65,7 @@ class ObsidianScribe:
         watcher_config['file_extensions'] = self.config['audio']['formats']
         
         self.file_watcher = FileWatcher(
-            watch_folder=self.config['paths']['watch_folder'],
+            watch_folder=self.config['paths']['audio_folder'],
             processor=self.processor,
             config=watcher_config
         )
@@ -128,7 +128,7 @@ class ObsidianScribe:
         # Log status
         self.logger.info("=" * 50)
         self.logger.info("STATUS UPDATE:")
-        self.logger.info(f"  Watching: {self.config['paths']['watch_folder']}")
+        self.logger.info(f"  Watching: {self.config['paths']['audio_folder']}")
         self.logger.info(f"  Watcher queue: {watcher_queue} files")
         self.logger.info(f"  Processor queue: {processor_queue} files")
         self.logger.info(f"  Files processed: {processor_stats.get('processed', 0)}")
@@ -210,6 +210,18 @@ Examples:
         help='Force enable speaker diarization (overrides config)'
     )
     
+    parser.add_argument(
+        '--output-name',
+        type=str,
+        help='Custom name for output transcript (without extension)'
+    )
+    
+    parser.add_argument(
+        '--naming-template',
+        type=str,
+        help='Custom naming template (e.g., "{date}_{source_name}")'
+    )
+    
     return parser.parse_args()
 
 
@@ -249,6 +261,14 @@ def main():
     elif args.enable_diarization:
         config_overrides['diarization.enabled'] = True
         logger.info("Diarization enabled via command line")
+    
+    # Handle naming overrides
+    if args.output_name:
+        config_overrides['transcript.naming.template'] = args.output_name
+        logger.info(f"Custom output name: {args.output_name}")
+    if args.naming_template:
+        config_overrides['transcript.naming.template'] = args.naming_template
+        logger.info(f"Custom naming template: {args.naming_template}")
     
     # Create and run the application
     app = ObsidianScribe(config_path=args.config)

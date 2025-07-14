@@ -53,9 +53,9 @@ class MarkdownWriter:
             Path to the created transcript file
         """
         try:
-            # Generate filename
+            # Generate filename using template
             audio_file = Path(audio_path)
-            transcript_filename = f"{audio_file.stem}_transcript.md"
+            transcript_filename = self._generate_filename(audio_path, metadata)
             transcript_path = self.transcript_folder / transcript_filename
             
             # Create full document
@@ -279,6 +279,101 @@ class MarkdownWriter:
             self.logger.error(f"Failed to create index file: {e}")
             raise
             
+    def _generate_filename(self, audio_path: str, metadata: Dict) -> str:
+        """
+        Generate filename based on template configuration.
+        
+        Args:
+            audio_path: Path to the original audio file
+            metadata: Transcript metadata
+            
+        Returns:
+            Generated filename with .md extension
+        """
+        audio_file = Path(audio_path)
+        naming_config = self.config.get('transcript', {}).get('naming', {})
+        
+        # Get template
+        template = naming_config.get('template', '{source_name}_transcript')
+        
+        # Build template variables
+        now = datetime.now()
+        variables = {
+            'date': now.strftime(naming_config.get('date_format', '%Y%m%d')),
+            'time': now.strftime(naming_config.get('time_format', '%H%M%S')),
+            'source_name': audio_file.stem,
+            'duration': self._format_duration_short(metadata.get('duration', 0)),
+            'speakers': str(metadata.get('speaker_count', 0)),
+            'language': metadata.get('language', 'en').upper()
+        }
+        
+        # Apply template
+        try:
+            filename = template.format(**variables)
+        except KeyError as e:
+            self.logger.warning(f"Invalid template variable {e}, using default naming")
+            filename = f"{audio_file.stem}_transcript"
+        
+        # Add prefix/suffix
+        prefix = naming_config.get('custom_prefix', '')
+        suffix = naming_config.get('custom_suffix', '')
+        
+        if prefix:
+            filename = f"{prefix}_{filename}"
+        if suffix:
+            filename = f"{filename}_{suffix}"
+        
+        # Handle conflicts and add extension
+        return self._resolve_filename_conflict(f"{filename}.md")
+    
+    def _format_duration_short(self, duration_seconds: float) -> str:
+        """Format duration in short form (e.g., 5m30s)."""
+        if duration_seconds < 60:
+            return f"{int(duration_seconds)}s"
+        elif duration_seconds < 3600:
+            minutes = int(duration_seconds // 60)
+            seconds = int(duration_seconds % 60)
+            return f"{minutes}m{seconds}s" if seconds > 0 else f"{minutes}m"
+        else:
+            hours = int(duration_seconds // 3600)
+            minutes = int((duration_seconds % 3600) // 60)
+            return f"{hours}h{minutes}m" if minutes > 0 else f"{hours}h"
+    
+    def _resolve_filename_conflict(self, filename: str) -> str:
+        """
+        Handle filename conflicts based on configuration.
+        
+        Args:
+            filename: Proposed filename
+            
+        Returns:
+            Resolved filename that doesn't conflict
+        """
+        naming_config = self.config.get('transcript', {}).get('naming', {})
+        conflict_resolution = naming_config.get('conflict_resolution', 'append_number')
+        
+        filepath = self.transcript_folder / filename
+        
+        # If no conflict, return as-is
+        if not filepath.exists():
+            return filename
+        
+        name_stem = Path(filename).stem
+        extension = Path(filename).suffix
+        
+        if conflict_resolution == 'overwrite':
+            return filename
+        elif conflict_resolution == 'timestamp':
+            timestamp = datetime.now().strftime('%H%M%S')
+            return f"{name_stem}_{timestamp}{extension}"
+        else:  # append_number
+            counter = 1
+            while filepath.exists():
+                new_filename = f"{name_stem}_{counter:02d}{extension}"
+                filepath = self.transcript_folder / new_filename
+                counter += 1
+            return new_filename
+
     def update_daily_note(self, transcript_path: str, daily_note_path: Optional[str] = None):
         """
         Add a link to the transcript in the daily note (placeholder for future enhancement).

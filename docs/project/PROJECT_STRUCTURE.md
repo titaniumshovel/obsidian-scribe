@@ -65,12 +65,25 @@ obsidian-scribe/
 ├── docs/                         # Documentation
 │   ├── README.md                # Documentation overview
 │   ├── API_REFERENCE.md         # API documentation
-│   ├── ARCHITECTURE_OVERVIEW.md # Architecture guide
 │   ├── CONFIGURATION.md         # Configuration reference
 │   ├── CONTRIBUTING.md          # Contribution guidelines
 │   ├── INSTALLATION.md          # Installation guide
-│   ├── TROUBLESHOOTING.md       # Common issues and solutions
-│   └── USAGE.md                 # Usage instructions
+│   ├── TROUBLESHOOTING.md       # Common issues and solutions  
+│   ├── USAGE.md                 # Usage instructions
+│   ├── IMPLEMENTATION_PLAN.md   # Development roadmap
+│   ├── PROGRESS_TRACKING.md     # Progress tracking docs
+│   ├── RESTRUCTURING_PROGRESS.md# Project restructuring log
+│   ├── WEBM_DETECTION_FIX.md    # Technical debugging notes
+│   ├── technical/               # Technical documentation
+│   │   ├── ARCHITECTURE.md      # System architecture
+│   │   ├── TECHNICAL_DECISIONS.md# Technology choices
+│   │   ├── CONFIG_SCHEMA.md     # Configuration schema
+│   │   ├── AUDIO_CHUNKING.md    # Audio processing strategy
+│   │   ├── VOICEMEETER_SETUP.md # Audio routing setup
+│   │   └── WHISPER_INTEGRATION.md# Integration guide
+│   └── project/                 # Project management docs
+│       ├── PROJECT_ROADMAP.md   # Strategic roadmap
+│       └── PROJECT_STRUCTURE.md # This file
 │
 ├── config.example.yaml          # Example configuration
 ├── requirements.txt             # Production dependencies
@@ -86,14 +99,6 @@ obsidian-scribe/
 ├── obsidian_scribe.py         # Legacy entry point
 ├── test_pipeline.py           # Pipeline testing script
 │
-├── ARCHITECTURE.md            # Architecture documentation
-├── AUDIO_CHUNKING.md         # Audio chunking documentation
-├── CONFIG_SCHEMA.md          # Configuration schema details
-├── PROJECT_STRUCTURE.md      # This file
-├── RESTRUCTURING_PROGRESS.md # Project restructuring progress
-├── TECHNICAL_DECISIONS.md    # Technical decision log
-├── VOICEMEETER_SETUP.md     # VoiceMeeter setup guide
-└── WHISPER_INTEGRATION.md   # Whisper API integration guide
 ```
 
 ## Module Descriptions

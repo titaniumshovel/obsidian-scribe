@@ -9,9 +9,9 @@ DEFAULT_CONFIG = {
     'obsidian_scribe': {
         # Paths configuration
         'paths': {
-            'audio_folder': './Audio',              # Folder to monitor for audio files
-            'transcript_folder': './Transcripts',   # Output folder for transcripts
-            'archive_folder': './Audio/Archive',    # Archive for processed files
+            'audio_folder': './audio',              # Folder to monitor for audio files
+            'transcript_folder': './transcripts',   # Output folder for transcripts
+            'archive_folder': './archive',          # Archive for processed files
             'temp_folder': './temp'                 # Temporary file storage
         },
         
