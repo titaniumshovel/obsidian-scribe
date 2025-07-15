@@ -35,6 +35,8 @@ obsidian-scribe
 # Drop audio files in your Audio folder and watch the magic happen! ✨
 ```
 
+**⚡ Performance Note**: Speaker diarization takes ~2-3 hours per hour of audio (free, local processing). Use `--no-diarization` for instant transcription. Only API transcription costs money (~$0.006/minute).
+
 **Pro tip**: Use `obsidian-scribe --debug` to see detailed progress. Files >25MB are automatically chunked.
 
 ---

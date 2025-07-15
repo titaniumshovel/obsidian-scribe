@@ -47,6 +47,57 @@ Obsidian Scribe supports the following audio formats:
 - AAC (.aac)
 - OPUS (.opus)
 
+## ⚡ Performance & Cost Considerations
+
+Understanding processing time and API costs is crucial for planning your transcription workflow.
+
+### Processing Time Breakdown
+
+**Local Processing (Free, but time-consuming):**
+- **Audio Conversion**: Fast (~10-30 seconds for most files)
+- **Audio Chunking**: Fast (~1-5 seconds for large files)
+- **Speaker Diarization**: Very slow (~2-3 hours per hour of audio)
+
+**API Processing (Fast, but costs money):**
+- **Transcription**: Fast (~1-2 minutes per hour of audio)
+
+### Cost Breakdown
+
+**What's FREE:**
+- ✅ Speaker diarization (runs locally using Hugging Face models)
+- ✅ Audio format conversion (uses local FFmpeg)
+- ✅ File chunking and preprocessing
+- ✅ Markdown generation and formatting
+
+**What COSTS MONEY:**
+- 💰 **Transcription API calls** - typically ~$0.006 per minute of audio
+- 💰 **Example**: 45-minute recording = ~$0.27 in API costs
+
+### Processing Time Examples
+
+| Audio Length | Diarization Time | Transcription Time | Total API Cost |
+|--------------|------------------|-------------------|----------------|
+| 15 minutes   | ~30-45 minutes   | ~30 seconds       | ~$0.09        |
+| 45 minutes   | ~1.5-2 hours     | ~1-2 minutes      | ~$0.27        |
+| 2 hours      | ~4-6 hours       | ~3-5 minutes      | ~$0.72        |
+
+### Performance Optimization Options
+
+**For Faster Processing (Skip Speaker Identification):**
+```bash
+# Skip diarization for immediate transcription
+python -m src.main --no-diarization
+```
+
+**For Cost Control:**
+- Diarization is always free (local processing)
+- Only transcription API calls cost money
+- Large files are automatically chunked to stay within API limits
+
+**For Background Processing:**
+- Diarization can run overnight or in background
+- Process will continue even if you close terminal (use `nohup` or `screen`)
+
 ### File Processing Workflow
 
 1. **Place audio files** in the configured audio folder
